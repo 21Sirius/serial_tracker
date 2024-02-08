@@ -6,15 +6,18 @@ from django.shortcuts import render
 
 def index(request):
     context = {
-        'title': 'Home',
-        'content': 'главная страиница трекера сериалов',
-        'list': ['first', 'second'],
-        'dict': {'first':1},
-        'is_auth':  True
+        'title': 'STracker',
+        'content': 'Трекер сериалов - STracker',
     }
 
     return render(request, 'main/index.html', context)
 
 
 def about(request):
-    return HttpResponse('About page')
+    context = {
+        'title': 'STracker - о нас',
+        'content': 'О нас',
+        'text_on_page': 'STracker-приложение для поиска и отслеживания истории просмотров сериалов',
+    }
+
+    return render(request, 'main/about.html', context)
