@@ -77,10 +77,9 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center my-4">
                             <div class="custom-shadow d-flex">
+
                                 <li class="page-item {% if not serials.has_previous%} disabled {% endif %}">
-                                  <a class="page-link" href="{% if serials.has_previous%}
-                                   {% url 'catalog:index' slug_url serials.previous_page_number %}
-                                   {% else %}
+                                  <a class="page-link" href="{% if serials.has_previous%} ?page={{serials.previous_number }}{% else %}
                                    #
                                    {% endif %}" >Назад</a>
                                 </li>
@@ -88,16 +87,14 @@
                                 {% for page in serials.paginator.page_range %}
                                 {% if page >= serials.number|add:-1 and page <= serials.number|add:1  %}
                                 <li class="page-item {% if serials.number == page %} active {% endif %}">
-                                    <a class="page-link" href="{% url 'catalog:index' slug_url page %}">{{ page }}</a>
+                                    <a class="page-link" href="?page={{page}}">{{ page }}</a>
                                 </li>
                                 {% endif %}
                                 {% endfor %}
 
 
                                 <li class="page-item {% if not serials.has_next %} disabled {% endif %}">
-                                  <a class="page-link" href="{% if serials.has_next%}
-                                   {% url 'catalog:index' slug_url serials.next_page_number %}
-                                   {% else %}
+                                  <a class="page-link" href="{% if serials.has_next%} ?page={{serials.next_number }}{% else %}
                                    #
                                    {% endif %}" >Следующая</a>
                                 </li>

@@ -5,7 +5,9 @@ from serials.models import Serial
 
 
 # Create your views here.
-def catalog(request, genre_slug,page=1):
+def catalog(request, genre_slug):
+
+    page = request.GET.get('page', 1)
 
     if genre_slug == 'vse-serialy':
         serials = Serial.objects.all()
@@ -13,7 +15,7 @@ def catalog(request, genre_slug,page=1):
         serials = Serial.objects.filter(genre__slug=genre_slug)
 
     paginator = Paginator(serials, 6)
-    current_page = paginator.page(page)
+    current_page = paginator.page(int(page))
 
     context = {
         'title': 'Список сериалов',
