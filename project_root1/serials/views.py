@@ -1,19 +1,24 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from serials.models import Serial
 
 
 # Create your views here.
-def catalog(request, genre_slug):
+def catalog(request, genre_slug,page=1):
 
     if genre_slug == 'vse-serialy':
         serials = Serial.objects.all()
     else:
         serials = Serial.objects.filter(genre__slug=genre_slug)
 
+    paginator = Paginator(serials, 6)
+    current_page = paginator.page(page)
+
     context = {
         'title': 'Список сериалов',
-        'serials': serials
+        'serials': current_page,
+        'slug_url': genre_slug,
     }
     return render(request, 'serials/catalog.html', context)
 

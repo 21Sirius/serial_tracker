@@ -6,6 +6,7 @@ app_name = 'serials'
 
 urlpatterns = [
     path('<slug:genre_slug>', views.catalog, name='index'),
+    path('<slug:genre_slug>/<int:page>/', views.catalog, name='index'),
     path('serial/<slug:serial_slug>/', views.serial, name='serial'),
 
 ]
