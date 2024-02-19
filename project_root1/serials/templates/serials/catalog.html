@@ -52,7 +52,7 @@
                                         <img src="{% static 'deps/images/Not found image.png' %}" class="card-img-top" alt="...">
                                     {% endif %}
                                     <div class="card-body">
-                                        <a href="../serials/catalog.html">
+                                        <a href="{% url 'catalog:serial' serial.slug  %}">
                                             <p class="card-title">{{serial.name}}</p>
                                         </a>
                                         <p class="card-text text-truncate">{{serial.genre}}</p>
