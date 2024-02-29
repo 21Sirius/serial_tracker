@@ -1,5 +1,6 @@
 {% extends "main/base.html"%}
 {% load static %}
+{% load serial_tags %}
 
 {% block content %}
                     <div class="row">
@@ -10,31 +11,36 @@
                                 Фильтры
                             </button>
 
-                            <form action="" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                            <form action=" {% if request.GET.q %} {% url  'catalog:search'%} {%else %} {% url 'catalog:index' slug_url %} {% endif %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
                                 <div class="form-check text-white mx-3">
-                                    <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on">
-                                    <input type="hidden" name="q" value="request.GET.q">
+                                    <input class="form-check-input" type="checkbox" name="top_on_top" id="flexCheckDefault" value="on" {% if request.GET.top_on_top == 'on' %} checked {% endif%}>
+                                    {% if request.GET.q %}
+                                        <input type="hidden" name="q" value="request.GET.q">
+                                    {% endif %}
                                     <label class="form-check-label" for="flexCheckDefault">
-                                        Товары по акции
+                                        Лучшие из лучших
                                     </label>
                                 </div>
                                 <p class="text-white mx-3 mt-3">Сортировать:</p>
                                 <div class="form-check text-white mx-3">
-                                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default" checked>
+                                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default"
+                                           {% if not request.GET.order_by or request.GET.order_by == 'default'  %}checked{%endif%}>
                                     <label class="form-check-label" for="flexRadioDefault1">
                                         По умолчанию
                                     </label>
                                 </div>
                                 <div class="form-check text-white mx-3">
-                                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price">
+                                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="rating"
+                                           {% if request.GET.top_on_top == 'on' %} checked {% endif%}>
                                     <label class="form-check-label" for="flexRadioDefault2">
-                                        От дешевых к дорогим
+                                        От худших к лучшим
                                     </label>
                                 </div>
                                 <div class="form-check text-white mx-3">
-                                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault3" value="-price">
+                                    <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault3" value="-rating"
+                                           {% if request.GET.top_on_top == 'on' %} checked {% endif%}>
                                     <label class="form-check-label" for="flexRadioDefault3">
-                                        От дорогих к дешевым
+                                        От лучших к худшим
                                     </label>
                                 </div>
                                 <button type="submit" class="btn btn-primary mx-3 mt-3">Применить</button>
@@ -79,24 +85,20 @@
                             <div class="custom-shadow d-flex">
 
                                 <li class="page-item {% if not serials.has_previous%} disabled {% endif %}">
-                                  <a class="page-link" href="{% if serials.has_previous%} ?page={{serials.previous_number }}{% else %}
-                                   #
-                                   {% endif %}" >Назад</a>
+                                  <a class="page-link" href="{% if serials.has_previous%} ?{% change_params page=serial.previous_page_number %}{% else %}#{% endif %}" >Назад</a>
                                 </li>
 
                                 {% for page in serials.paginator.page_range %}
                                 {% if page >= serials.number|add:-1 and page <= serials.number|add:1  %}
                                 <li class="page-item {% if serials.number == page %} active {% endif %}">
-                                    <a class="page-link" href="?page={{page}}">{{ page }}</a>
+                                    <a class="page-link" href="?{% change_params page=page %}">{{ page }}</a>
                                 </li>
                                 {% endif %}
                                 {% endfor %}
 
 
                                 <li class="page-item {% if not serials.has_next %} disabled {% endif %}">
-                                  <a class="page-link" href="{% if serials.has_next%} ?page={{serials.next_number }}{% else %}
-                                   #
-                                   {% endif %}" >Следующая</a>
+                                  <a class="page-link" href="{% if serials.has_next%} ? {% change_params page=serial.next_page_number %}{% else %}#{% endif %}" >Следующая</a>
                                 </li>
                             </div>
                         </ul>
