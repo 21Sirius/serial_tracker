@@ -23,7 +23,9 @@ from project_root import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('main.urls', namespace='main')),
-    path('catalog/', include('serials.urls', namespace='catalog'))
+    path('catalog/', include('serials.urls', namespace='catalog')),
+    path('user/', include('users.urls', namespace='user'))
+
 ]
 
 if settings.DEBUG:
